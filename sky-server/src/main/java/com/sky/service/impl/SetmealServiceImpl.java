@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 新增套餐
      * @param setmealDTO
      */
+    @Transactional
     public void save(SetmealDTO setmealDTO) {
         //向套餐表插入套餐信息
         Setmeal setmeal = new Setmeal();
@@ -79,6 +81,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 删除套餐
      * @param ids
      */
+    @Transactional
     public void delete(List<Long> ids){
         //判断是否有启售中的套餐
         for(Long id : ids){
@@ -109,6 +112,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 修改套餐
      * @param setmealDTO
      */
+    @Transactional
     public void update(SetmealDTO setmealDTO) {
         //传入数据拷贝到semeal对象中
         Setmeal setmeal = new Setmeal();

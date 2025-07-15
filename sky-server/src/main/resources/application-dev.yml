@@ -11,3 +11,7 @@ sky:
     access-key-id: LTAI5tAugZTcUzaFJ7iZp2Nu
     access-key-secret:  wVxK7gaA9WQF2xjgtm78jZYI7YWYhE
     bucket-name: aaron-sky-take-out
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
