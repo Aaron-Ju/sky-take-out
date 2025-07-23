@@ -37,4 +37,10 @@ public interface OrderService {
      * @return
      */
     OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
+
+    /**
+     * 用户根据id取消订单
+     * @param id
+     */
+    void userCancelById(Long id);
 }
