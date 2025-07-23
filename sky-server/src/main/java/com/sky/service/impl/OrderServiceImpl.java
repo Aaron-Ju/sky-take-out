@@ -257,4 +257,52 @@ public class OrderServiceImpl implements OrderService {
         //将购物车对象批量加入到数据库
         shoppingCartMapper.insertBatch(shoppingCartList);
     }
+
+    /**
+     * 条件查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+
+        //部分订单状态，需要额外返回菜品信息，将orders转化为orderVO
+        List<OrderVO> orderVOList = getOrderVOList(page);
+        return new PageResult(orderVOList.size(),orderVOList);
+    }
+
+    private List<OrderVO> getOrderVOList(Page<Orders> page){
+         List<OrderVO> orderVOList = new ArrayList<>();
+
+         List<Orders> ordersList = page.getResult();
+        for(Orders orders : ordersList){
+            OrderVO orderVO = new OrderVO();
+            //将共同字段赋值给orderVO
+            BeanUtils.copyProperties(orders,orderVO);
+
+            //为orderdishes赋值
+            String orderDishes = getOrderDishes(orders);
+            orderVO.setOrderDishes(orderDishes);
+            orderVOList.add(orderVO);
+        }
+        return orderVOList;
+    }
+
+    /**
+     * 根据订单id获取菜品信息字符串
+     * @param orders
+     * @return
+     */
+    private String getOrderDishes(Orders orders){
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orders.getId());
+        String orderDishes = "";
+
+        //将订单信息拼接起来
+        for(OrderDetail orderDetail : orderDetailList){
+            orderDishes = orderDishes + orderDetail.getName() + "*"+orderDetail.getNumber();
+        }
+        return orderDishes;
+    }
 }
