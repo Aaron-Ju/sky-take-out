@@ -49,4 +49,17 @@ public class OrderController {
         PageResult pageResult = orderService.pageQuery4User(page,pageSize,status);
         return Result.success(pageResult);
     }
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation(("查询订单详情"))
+    public Result<OrderVO> details(@PathVariable Long id){
+        log.info("订单详情：{}",id);
+        OrderVO orderVO = orderService.detail(id);
+        return Result.success(orderVO);
+    }
 }
