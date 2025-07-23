@@ -12,4 +12,17 @@
         #{checkoutTime},#{payMethod}, #{payStatus}, #{amount}, #{remark}, #{phone}, #{address},
         #{consignee},#{estimatedDeliveryTime}, #{deliveryStatus}, #{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
+
+    <select id="pageQuery" resultType="Orders">
+        select * from orders
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
 </mapper>

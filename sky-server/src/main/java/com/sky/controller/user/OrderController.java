@@ -1,18 +1,17 @@
 package com.sky.controller.user;
 
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController("userOrderController")
 @RequestMapping("/user/order")
@@ -22,6 +21,7 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
     /**
      * 用户端订单提交
      * @param ordersSubmitDTO
@@ -33,5 +33,20 @@ public class OrderController {
         log.info("订单提交：{}",ordersSubmitDTO);
         OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
         return Result.success(orderSubmitVO);
+    }
+
+    /**
+     * 分页查询历史订单
+     * @param page
+     * @param pageSize
+     * @param status
+     * @return
+     */
+    @GetMapping("/historyOrders")
+    @ApiOperation("分页查询历史订单")
+    public Result<PageResult> page(int page, int pageSize, Integer status){
+        log.info("查询历史订单：{},{},{}",page,pageSize,status);
+        PageResult pageResult = orderService.pageQuery4User(page,pageSize,status);
+        return Result.success(pageResult);
     }
 }
