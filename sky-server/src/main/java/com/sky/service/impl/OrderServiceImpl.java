@@ -423,7 +423,7 @@ public class OrderServiceImpl implements OrderService {
     public void reminder(Long orderId) {
         Orders orders = orderMapper.getById(orderId);
 
-        //判断订单是否已经支付成功并且待接单
+        //判断订单是否已经支付成功并且用户待接单
         if(orders.getStatus()!=Orders.TO_BE_CONFIRMED || orders.getPayStatus()!=Orders.PAID){
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
