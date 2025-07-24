@@ -415,4 +415,24 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
     }
+
+    /**
+     * 用户催单
+     * @param orderId
+     */
+    public void reminder(Long orderId) {
+        Orders orders = orderMapper.getById(orderId);
+
+        //判断订单是否已经支付成功并且待接单
+        if(orders.getStatus()!=Orders.TO_BE_CONFIRMED || orders.getPayStatus()!=Orders.PAID){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Map map = new HashMap();
+        map.put("type",2);
+        map.put("orderId",orderId);
+        map.put("content",orders.getNumber());
+
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
+    }
 }
